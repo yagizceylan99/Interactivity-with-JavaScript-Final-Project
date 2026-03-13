@@ -1,4 +1,9 @@
 /*Name this external file gallery.css*/
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 2%;
     border: 1px solid black;
@@ -6,27 +11,55 @@ body {
 }
 
 #image {
-    line-height: 650px;
-    width: 575px;
-    height: 650px;
-    border: 5px solid black;
-    margin: 0 auto;
+    /* Sabit genişlik yerine maksimum genişlik kullanıyoruz */
+    width: 95%;           /* Mobilde ekranın %95'ini kaplar */
+    max-width: 575px;     /* Ama asla 575px'i geçmez */
+    
+    /* Yüksekliği ekran oranına göre korumak için aspect-ratio harikadır */
+    aspect-ratio: 575 / 650; 
+    /* Eğer aspect-ratio kullanmak istemezsen min-height: 400px; gibi bir değer verebilirsin */
+
+    border: 3px solid black;
+    margin: 0 auto 25px auto;
     background-color: #8e68ff;
-    background-image: url('');
     background-repeat: no-repeat;
+    background-position: center; /* Resmi merkeze alır */
+    background-size: cover;      /* Resmin kutuyu tam doldurmasını sağlar (bozulmadan) */
+    
     color: #FFFFFF;
-    text-align: center;
-    background-size: 100%;
-    margin-bottom: 25px;
-    font-size: 150%;
+    font-size: clamp(1rem, 4vw, 1.5rem); /* Ekran küçüldükçe yazı da küçülür */
+    
+    /* Satır yüksekliği (line-height) ile ortalama yapmak yerine Flexbox kullanıyoruz */
+    display: flex;
+    align-items: center;    /* Dikeyde ortalar */
+    justify-content: center; /* Yatayda ortalar */
+    padding: 20px;          /* Yazı kenarlara yapışmasın diye */
+    box-sizing: border-box; /* Padding'in genişliği bozmasını engeller */
 }
 
 .preview {
-    width: 10%;
-    margin-left: 17%;
-    border: 10px solid black;
+    border: 3px solid black;
+    width: 100%;
+    height: auto;
 }
 
-img {
-    width: 95%;
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+    align-items: end;
+}
+
+@media screen and (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gallery {
+        grid-template-columns: 1fr;
+    }
 }
