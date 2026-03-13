@@ -7,6 +7,8 @@ function upDate(previewPic) {
     imageObject.style.backgroundImage = "url('" + previewPic.src + "')";
     //Change the text  of the div with the id = "image" to the alt text of the preview image.
     imageObject.innerHTML = previewPic.alt;
+    // Change the opacity of the div with the id = "image" to 1.0 to make the background image visible.
+    imageObject.style.opacity = "1.0";
 }
 
 function unDo() {
@@ -14,45 +16,50 @@ function unDo() {
     var imageObject = document.getElementById("image");
     // Update the url for the background image of the div with the id = "image" back to the orginal-image.
     imageObject.style.backgroundColor = "#8e68ff";
+    // Change the url for the background image of the div with the id = "image" back to the original image.
     imageObject.style.backgroundImage = "url(' ')";
     // Change the text  of the div with the id = "image" back to the original text.
     imageObject.innerHTML = "Hover over an image below to display here.";
+    // Change the opacity of the div with the id = "image" back to 0.5 to make the background image invisible.
+    imageObject.style.opacity = "0.5";
 }
 
-// 1. Yardımcı Fonksiyon: Görünümü Güncelle
+// 1. Helper Function: Update Display
 function updateDisplay(imageUrl, text) {
     const displayDiv = document.getElementById("image");
     displayDiv.style.backgroundImage = imageUrl ? `url('${imageUrl}')` : "none";
-    displayDiv.textContent = text || "Hover over an image below to display here.";
+    displayDiv.innerHTML = text ? text : "Hover over an image below to display here.";
 }
 
-// 2. Ana Fonksiyon: Galeri Başlatıcı
+// 2. Main Function: Gallery Initializer
 function setupGallery() {
-    // Tüm önizleme resimlerini seç
+    // Choose all elements with the class "preview" and assign them to a variable.
     const images = document.querySelectorAll(".preview");
-
-    // Her resim için gerekli event listener'ları ekle
+    console.log("Galeri başlatıldı, " + images.length + " adet resim bulundu."); // Control for image selection
+    alert("Galeri başlatıldı, " + images.length + " adet resim bulundu."); // User feedback for gallery initialization
+    // Loop through each image and add event listeners for focus and blur (or mouseover and mouseout).
     images.forEach(img => {
         img.tabIndex = 0;
 
-        // Odaklanma (Focus/MouseOver birleştirilebilir)
         const handleFocus = () => {
+            console.log("Event tetiklendi: Focus/MouseOver -> " + img.alt); // Control for focus/mouseover event
             img.style.outline = "5px solid #8e68ff";
-            
+            img.style.opacity = "1.0";
             updateDisplay(img.src, img.alt);
         };
 
-        // Odaktan Çıkma (Blur/MouseOut birleştirilebilir)
         const handleBlur = () => {
+            console.log("Event tetiklendi: Blur/MouseOut"); // Control for blur/mouseout event
             img.style.outline = "";
-            updateDisplay(); // Parametre göndermezsek varsayılana döner
+            img.style.opacity = "0.5";
+            updateDisplay(); // If called without arguments, it will reset to default state.
         };
 
-        // Event listener'ları ekle
+        // Add both event listeners to each image.
         img.addEventListener("focus", handleFocus);
         img.addEventListener("blur", handleBlur);
     });
 }
 
-// Sayfa hazır olduğunda tek bir yerden başlat
-document.addEventListener("DOMContentLoaded", setupGallery);
+// Call setupGallery when the window loads to ensure all elements are available.
+window.addEventListener("load", setupGallery);
